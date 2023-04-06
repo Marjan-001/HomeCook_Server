@@ -25,7 +25,7 @@ async function dbConnect() {
 }
 dbConnect();
 const ServiceCollection = client.db('homecook').collection('services');
-
+const reviewCollection = client.db('homecook').collection('reviews')
 
 
 //routes
@@ -78,6 +78,17 @@ app.get("/services/:id", async (req, res) => {
     const query = { _id: new ObjectId(id) };
     const result = await ServiceCollection.findOne(query);
 
+    res.send({
+        success: true,
+        data: result,
+    });
+})
+
+
+//post review
+app.post('/reviews/:id', async (req, res) => {
+    const review = req.body;
+    const result = await reviewCollection.insertOne(review);
     res.send({
         success: true,
         data: result,
