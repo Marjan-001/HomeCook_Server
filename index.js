@@ -86,7 +86,7 @@ app.get("/services/:id", async (req, res) => {
 
 
 //post review
-app.post('/reviews/:id', async (req, res) => {
+app.post('/reviews', async (req, res) => {
     const review = req.body;
     const result = await reviewCollection.insertOne(review);
     res.send({
@@ -94,4 +94,34 @@ app.post('/reviews/:id', async (req, res) => {
         data: result,
     });
 })
+//get review
+// app.get('/reviews/:id', async (req, res) => {
+//     const _id = req.params._id;
+//     const query = { serviceId: _id };
+//     const cursor = reviewCollection.find(query);
+//     const result = await cursor.toArray();
+
+//     res.send({
+//         success: true,
+//         data: result,
+
+//     });
+// })
+
+app.get('/review', async (req, res) => {
+
+    // const serviceId = req.params.id;
+    let query = {};
+    if (req.query.serviceId) {
+        query = {
+            serviceId: req.query.serviceId
+        }
+    }
+    const cursor = reviewCollection.find(query).sort({ service: -1 });
+    const reviews = await cursor.toArray();
+    res.send(reviews);
+
+})
+
+
 app.listen(5000, () => console.log("server is running"));
