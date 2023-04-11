@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
-
+const port = process.env.PORT || 5000;
 // import { MongoClient } from 'mongodb'
 
 const uri = "mongodb+srv://homecook:kVkjM5HRditzFIre@cluster0.hmvy7hf.mongodb.net/?retryWrites=true&w=majority";
@@ -15,7 +15,7 @@ app.use(express.json());
 async function dbConnect() {
 
     try {
-        await client.connect();
+        // await client.connect();
 
         console.log("database connected")
     }
@@ -31,7 +31,9 @@ const reviewCollection = client.db('homecook').collection('reviews')
 //routes
 
 //get 3 services
-
+app.get("/", async (req, res) => {
+    res.send("Server running")
+})
 app.get("/services", async (req, res) => {
     try {
         const cursor = ServiceCollection.find({});
@@ -124,4 +126,4 @@ app.get('/review', async (req, res) => {
 })
 
 
-app.listen(5000, () => console.log("server is running"));
+app.listen(port, () => console.log("server is running"));
